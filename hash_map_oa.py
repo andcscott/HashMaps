@@ -57,26 +57,78 @@ class HashMap:
         """
         # remember, if the load factor is greater than or equal to 0.5,
         # resize the table before putting the new key/value pair
-        pass
+
+        if self.table_load() >= 0.5:
+            self.resize_table(self._capacity * 2)
+
+
+        hash = self._hash_function(key)
+        index = hash % self._capacity
+        if self._buckets[index] is None:
+            self._buckets[index] = HashEntry(key, value)
+
+        elif self._buckets[index].key == key:
+            self._buckets[index].value = value
+            self._buckets[index].is_tombstone = False
+
+        self._size += 1
 
     def table_load(self) -> float:
+        """Get the current hash table load factor
+
+        Returns
+        -------
+        float
+            The load factor
         """
-        TODO: Write this implementation
-        """
-        pass
+
+        return self._size / self._capacity
 
     def empty_buckets(self) -> int:
+        """Gets the number of empty buckets in the hash table
+
+        Returns
+        -------
+        int
+            Number of empty buckets
         """
-        TODO: Write this implementation
-        """
-        pass
+
+        count = 0
+        for i in range(self._capacity):
+            entry = self._buckets[i]
+            if entry is None or entry.is_tombstone:
+                count += 1
+        return count
+
 
     def resize_table(self, new_capacity: int) -> None:
+        """Changes the capacity of the hash table
+
+        All existing key/value pairs remain and are rehashed. Does nothing if
+        the new capacity is less than 1.
+
+        Parameters
+        ----------
+        new_capacity : int
+            New capacity for the hash table
         """
-        TODO: Write this implementation
-        """
-        # remember to rehash non-deleted entries into new table
-        pass
+
+        # immediately return if new_capacity is less than 1
+        if new_capacity < 1:
+            return
+        # create new hash table if new_capacity is 1 or greater
+        new_table = DynamicArray()
+        for i in range(new_capacity):
+            new_table.append(None)
+        # rehash and move values from current to new hash table
+        for i in range(self._capacity):
+            if self._buckets[i] is not None:
+                hash = self._hash_function(self._buckets[i].key)
+                index = hash % new_capacity
+                new_table[index] = self._buckets[i]
+        # assign the new table and capacity to the existing HashMap object
+        self._buckets = new_table
+        self._capacity = new_capacity
 
     def get(self, key: str) -> object:
         """
