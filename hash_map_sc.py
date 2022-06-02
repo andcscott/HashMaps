@@ -6,7 +6,7 @@
 # Description: HashMap implementation using Separate Chaining
 
 
-from a6_include import DynamicArray, LinkedList, hash_function_1, hash_function_2
+from a6_include import DynamicArray, LinkedList, SLNode, hash_function_1, hash_function_2
 
 
 class HashMap:
@@ -51,28 +51,58 @@ class HashMap:
     # ------------------------------------------------------------------ #
 
     def put(self, key: str, value: object) -> None:
+        """Adds (or updates) a key/value pair to the hash map
+
+        Parameters
+        ----------
+        key : str
+            Identifier for the given value
+        value : object
+            Value to add, or update if the key is already present
         """
-        TODO: Write this implementation
-        """
-        pass
+
+        hash = self._hash_function(key)
+        index = hash % self._capacity
+        node = self._buckets[index].contains(key)
+        if node is None:
+            self._buckets[index].insert(key, value)
+            self._size += 1
+        else:
+            node.value = value
 
     def empty_buckets(self) -> int:
+        """Gets the number of empty buckets in the hash table
+
+        Returns
+        -------
+        int
+            Number of empty buckets
         """
-        TODO: Write this implementation
-        """
-        pass
+
+        count = 0
+        for index in range(self._capacity):
+            if self._buckets[index].length() == 0:
+                count += 1
+        return count
 
     def table_load(self) -> float:
+        """Get the current hash table load factor
+
+        Returns
+        -------
+        float
+            The load factor
         """
-        TODO: Write this implementation
-        """
-        pass
+
+        return self._size / self._capacity
 
     def clear(self) -> None:
-        """
-        TODO: Write this implementation
-        """
-        pass
+        """Clear the contents of the hash map without changing its capacity"""
+        for index in range(self._capacity):
+            if self._buckets[index].length() != 0:
+                self._buckets[index] = LinkedList()
+        self._size = 0
+
 
     def resize_table(self, new_capacity: int) -> None:
         """
