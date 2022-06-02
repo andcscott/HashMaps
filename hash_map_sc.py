@@ -185,16 +185,35 @@ class HashMap:
 
 
     def remove(self, key: str) -> None:
+        """Removes a key/value pair from the hash map
+
+        Parameters
+        ----------
+        key : str
+            Key to look up in the hash map
         """
-        TODO: Write this implementation
-        """
-        pass
+
+        hash = self._hash_function(key)
+        index = hash % self._capacity
+        is_removed = self._buckets[index].remove(key)
+        if is_removed:
+            self._size -= 1
 
     def get_keys(self) -> DynamicArray:
+        """Get an array that contains all the keys in the hash map
+
+        Returns
+        -------
+        DynamicArray
+            Array containing the hash maps keys
         """
-        TODO: Write this implementation
-        """
-        pass
+
+        keys = DynamicArray()
+        for i in range(self._capacity):
+            linked_list = self._buckets[i]
+            for node in linked_list:
+                keys.append(node.key)
+        return keys
 
 
 def find_mode(da: DynamicArray) -> (DynamicArray, int):
