@@ -72,6 +72,26 @@ class HashMap:
         else:
             node.value = value
 
+    def empty_map_put(self, index_array, key: str, value: object) -> DynamicArray:
+        """Alternative to put() with reduced time complexity for empty hash maps
+
+        Note that unlike put() this method allows duplicates for the purpose of
+        finding the mode and frequency of values added to the hash map.
+
+        Parameters
+        ----------
+        key : str
+            Indentifier for the given value
+        value : object
+            Value to add
+        """
+
+        hash = self._hash_function(key)
+        index = hash % self._capacity
+        index_array.append(index)
+        self._buckets[index].insert(key, value)
+        return index_array
+
     def empty_buckets(self) -> int:
         """Gets the number of empty buckets in the hash table
 
@@ -223,6 +243,10 @@ def find_mode(da: DynamicArray) -> (DynamicArray, int):
     # if you'd like to use a hash map,
     # use this instance of your Separate Chaining HashMap
     map = HashMap(da.length() // 3, hash_function_1)
+
+    pass
+
+
 
 
 # ------------------- BASIC TESTING ---------------------------------------- #
