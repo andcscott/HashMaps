@@ -64,9 +64,11 @@ class HashMap:
         hash = self._hash_function(key)
         index = hash % self._capacity
         node = self._buckets[index].contains(key)
+        # create new key/value pair if key does not exist
         if node is None:
             self._buckets[index].insert(key, value)
             self._size += 1
+        # update value if key already exists
         else:
             node.value = value
 
@@ -80,8 +82,8 @@ class HashMap:
         """
 
         count = 0
-        for index in range(self._capacity):
-            if self._buckets[index].length() == 0:
+        for i in range(self._capacity):
+            if self._buckets[i].length() == 0:
                 count += 1
         return count
 
@@ -98,29 +100,89 @@ class HashMap:
 
     def clear(self) -> None:
         """Clear the contents of the hash map without changing its capacity"""
-        for index in range(self._capacity):
-            if self._buckets[index].length() != 0:
-                self._buckets[index] = LinkedList()
+        for i in range(self._capacity):
+            if self._buckets[i].length() != 0:
+                self._buckets[i] = LinkedList()
         self._size = 0
 
 
     def resize_table(self, new_capacity: int) -> None:
+        """Changes the capacity of the hash table
+
+        All existing key/value pairs remain and are rehashed. Does nothing if
+        the new capacity is less than 1.
+
+        Parameters
+        ----------
+        new_capacity : int
+            New capacity for the hash table
         """
-        TODO: Write this implementation
-        """
-        pass
+
+        # immediately return if new_capacity is less than 1
+        if new_capacity < 1:
+            return
+        # create new hash table if new_capacity is 1 or greater
+        new_table = DynamicArray()
+        for i in range(new_capacity):
+            new_table.append(LinkedList())
+        # rehash and move values from current to new hash table
+        for i in range(self._capacity):
+            linked_list = self._buckets[i]
+            if linked_list.length() != 0:
+                for node in linked_list:
+                    hash = self._hash_function(node.key)
+                    index = hash % new_capacity
+                    new_table[index].insert(node.key, node.value)
+        # assign the new table and capacity to the existing HashMap object
+        self._buckets = new_table
+        self._capacity = new_capacity
 
     def get(self, key: str) -> object:
+        """Get the value associated with the given key
+
+        Parameters
+        ----------
+        key : str
+            Key to look up in the hash map
+
+        Returns
+        -------
+        object
+            The value associated with the key, or None if the key does not exist
         """
-        TODO: Write this implementation
-        """
-        pass
+
+        hash = self._hash_function(key)
+        index = hash % self._capacity
+        node = self._buckets[index].contains(key)
+        if node is None:
+            return node
+        return node.value
 
     def contains_key(self, key: str) -> bool:
+        """Checks if a given key is in the hash map
+
+        Parameters
+        ----------
+        key : str
+            Key to look up in the hash map
+
+        Returns
+        -------
+        bool
+            True if the key is in the hash map, otherwise False
         """
-        TODO: Write this implementation
-        """
-        pass
+
+        # immediately return if the hash map is empty
+        if self._size == 0:
+            return False
+        # proceed to check for key in non-empty hash map
+        hash = self._hash_function(key)
+        index = hash % self._capacity
+        node = self._buckets[index].contains(key)
+        if node is not None:
+            return True
+        return False
+
 
     def remove(self, key: str) -> None:
         """
