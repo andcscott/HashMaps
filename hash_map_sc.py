@@ -6,7 +6,13 @@
 # Description: HashMap implementation using Separate Chaining
 
 
-from a6_include import DynamicArray, LinkedList, SLNode, hash_function_1, hash_function_2
+from a6_include import (
+    DynamicArray,
+    LinkedList,
+    SLNode,
+    hash_function_1,
+    hash_function_2,
+)
 
 
 class HashMap:
@@ -64,33 +70,11 @@ class HashMap:
         hash = self._hash_function(key)
         index = hash % self._capacity
         node = self._buckets[index].contains(key)
-        # create new key/value pair if key does not exist
         if node is None:
             self._buckets[index].insert(key, value)
             self._size += 1
-        # update value if key already exists
         else:
             node.value = value
-
-    def empty_map_put(self, index_array, key: str, value: object) -> DynamicArray:
-        """Alternative to put() with reduced time complexity for empty hash maps
-
-        Note that unlike put() this method allows duplicates for the purpose of
-        finding the mode and frequency of values added to the hash map.
-
-        Parameters
-        ----------
-        key : str
-            Indentifier for the given value
-        value : object
-            Value to add
-        """
-
-        hash = self._hash_function(key)
-        index = hash % self._capacity
-        index_array.append(index)
-        self._buckets[index].insert(key, value)
-        return index_array
 
     def empty_buckets(self) -> int:
         """Gets the number of empty buckets in the hash table
@@ -120,11 +104,11 @@ class HashMap:
 
     def clear(self) -> None:
         """Clear the contents of the hash map without changing its capacity"""
+
         for i in range(self._capacity):
             if self._buckets[i].length() != 0:
                 self._buckets[i] = LinkedList()
         self._size = 0
-
 
     def resize_table(self, new_capacity: int) -> None:
         """Changes the capacity of the hash table
@@ -203,7 +187,6 @@ class HashMap:
             return True
         return False
 
-
     def remove(self, key: str) -> None:
         """Removes a key/value pair from the hash map
 
@@ -240,13 +223,22 @@ def find_mode(da: DynamicArray) -> (DynamicArray, int):
     """
     TODO: Write this implementation
     """
-    # if you'd like to use a hash map,
+
+    mode_arr = DynamicArray()
+    if da.length() == 1:
+        mode_arr.append(da[0])
+        return mode_arr, 1
+
     # use this instance of your Separate Chaining HashMap
     map = HashMap(da.length() // 3, hash_function_1)
 
-    pass
+    item = 1
+    for i in range(da.length()):
+        key = "key" + str(item)
+        map.put(key, da[i])
+        item += 1
 
-
+    return -1, -1
 
 
 # ------------------- BASIC TESTING ---------------------------------------- #
