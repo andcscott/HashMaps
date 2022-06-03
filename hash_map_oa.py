@@ -52,9 +52,16 @@ class HashMap:
     # ------------------------------------------------------------------ #
 
     def put(self, key: str, value: object) -> None:
+        """Adds (or updates) a key/value pair to the hash map
+
+        Parameters
+        ----------
+        key : str
+            Identifier for the given value
+        value : object
+            Value to add, or update if the key is already present
         """
-        TODO: Write this implementation
-        """
+
         # remember, if the load factor is greater than or equal to 0.5,
         # resize the table before putting the new key/value pair
 
@@ -62,16 +69,28 @@ class HashMap:
             self.resize_table(self._capacity * 2)
 
 
+
         hash = self._hash_function(key)
-        index = hash % self._capacity
-        if self._buckets[index] is None:
-            self._buckets[index] = HashEntry(key, value)
-
-        elif self._buckets[index].key == key:
-            self._buckets[index].value = value
-            self._buckets[index].is_tombstone = False
-
-        self._size += 1
+        initial_index = hash % self._capacity
+        is_placed = False
+        quadratic_factor = 0
+        index = initial_index
+        while not is_placed:
+            if self._buckets[index] is None:
+                self._buckets[index] = HashEntry(key, value)
+                self._size += 1
+                is_placed = True
+            elif self._buckets[index].is_tombstone:
+                self._buckets[index].key = key
+                self._buckets[index].value = value
+                self._buckets[index].is_tombstone = False
+                is_placed = True
+            elif self._buckets[index].key == key:
+                self._buckets[index].value = value
+                is_placed = True
+            else:
+                quadratic_factor += 1
+                index = (initial_index + quadratic_factor**2) % self._capacity
 
     def table_load(self) -> float:
         """Get the current hash table load factor
@@ -94,7 +113,7 @@ class HashMap:
         """
 
         count = 0
-        for i in range(self._capacity):
+        for i in range(self._buckets.length()):
             entry = self._buckets[i]
             if entry is None or entry.is_tombstone:
                 count += 1
@@ -114,51 +133,96 @@ class HashMap:
         """
 
         # immediately return if new_capacity is less than 1
-        if new_capacity < 1:
+        if new_capacity < 1 or new_capacity < self._size:
             return
-        # create new hash table if new_capacity is 1 or greater
+        # create new hash table
         new_table = DynamicArray()
+        old_table = self._buckets
         for i in range(new_capacity):
             new_table.append(None)
-        # rehash and move values from current to new hash table
-        for i in range(self._capacity):
-            if self._buckets[i] is not None:
-                hash = self._hash_function(self._buckets[i].key)
-                index = hash % new_capacity
-                new_table[index] = self._buckets[i]
-        # assign the new table and capacity to the existing HashMap object
         self._buckets = new_table
+        self._size = 0
         self._capacity = new_capacity
+        for i in range(old_table.length()):
+            if old_table[i] is not None and not old_table[i].is_tombstone:
+                self.put(old_table[i].key, old_table[i].value)
 
     def get(self, key: str) -> object:
+        """Get the value associated with a key
+
+        Parameters
+        ----------
+        key : str
+            The key to look up in the hash map
+
+        Returns
+        -------
+        object
+            The value associated with the key if it exists, otherwise None
         """
-        TODO: Write this implementation
-        """
-        pass
+
+        for i in range(self._capacity):
+            if self._buckets[i] is not None and self._buckets[i].key == key:
+                return self._buckets[i].value
+        return None
 
     def contains_key(self, key: str) -> bool:
+        """Checks if a given key is in the hash map
+
+        Parameters
+        ----------
+        key : str
+            Key to look up in the hash map
+
+        Returns
+        -------
+        bool
+            True if the key is in the hash map, otherwise False
         """
-        TODO: Write this implementation
-        """
-        pass
+
+        for i in range(self._capacity):
+            if self._buckets[i] is not None and self._buckets[i].key == key:
+                return True
+        return False
 
     def remove(self, key: str) -> None:
+        """Removes a key/value pair from the hash map
+
+        Parameters
+        ----------
+        key : str
+            Key to look up in the hash map
         """
-        TODO: Write this implementation
-        """
-        pass
+
+        for i in range(self._capacity):
+            if self._buckets[i] is not None and self._buckets[i].key == key:
+                self._buckets[i].is_tombstone = True
+                self._size -= 1
 
     def clear(self) -> None:
         """
         TODO: Write this implementation
         """
-        pass
+
+        self._buckets = DynamicArray()
+        self._size = 0
+        self._capacity = self._buckets.length()
+        for i in range(self._buckets.length()):
+            self._buckets.append(None)
 
     def get_keys(self) -> DynamicArray:
+        """Get an array that contains all the keys in the hash map
+
+        Returns
+        -------
+        DynamicArray
+            Array containing the hash maps keys
         """
-        TODO: Write this implementation
-        """
-        pass
+
+        keys = DynamicArray
+        for i in range(self._capacity):
+            if self._buckets[i] is not None:
+                keys.append(self._buckets[i].key)
 
 
 # ------------------- BASIC TESTING ---------------------------------------- #
