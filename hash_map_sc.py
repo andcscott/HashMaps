@@ -5,8 +5,6 @@
 # Due Date: 2022-06-03
 # Description: HashMap implementation using Separate Chaining
 
-
-import matplotlib
 from a6_include import (
     DynamicArray,
     LinkedList,
@@ -78,7 +76,7 @@ class HashMap:
             node.value = value
 
     def find_mode_put(self, key: str, value: object) -> None:
-        """Adds (or updates) a key/value pair to the hash map
+        """Alternative put() method to help find_mode() track frequency
 
         Parameters
         ----------
