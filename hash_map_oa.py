@@ -224,9 +224,7 @@ class HashMap:
                 index = (initial_index + quadratic_factor**2) % self._capacity
 
     def clear(self) -> None:
-        """
-        TODO: Write this implementation
-        """
+        """Clear the contents of the hash map without changing its capacity"""
 
         self._buckets = DynamicArray()
         self._size = 0
