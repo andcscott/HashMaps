@@ -1,12 +1,7 @@
-# Course:      CS261 - Data Structures
-# Assignment:  6
-# Description: Provided data structures necessary to complete the assignment.
-#              Please look through this file carefully to see what methods
-#              are available and how they're implemented.
-#              Don't modify the contents of this file.
-
+############## Provided by Oregon State University ###############
 
 # -------------- Used by both HashMaps (SC & OA)  -------------- #
+
 
 class DynamicArrayException(Exception):
     pass
@@ -98,6 +93,7 @@ def hash_function_2(key: str) -> int:
 
 # --------- For use in Separate Chaining (SC) HashMap  --------- #
 
+
 class SLNode:
     """
     Singly Linked List node for use in a hash map
@@ -111,7 +107,7 @@ class SLNode:
 
     def __str__(self) -> str:
         """Override string method to provide more readable output."""
-        return '(' + str(self.key) + ': ' + str(self.value) + ')'
+        return "(" + str(self.key) + ": " + str(self.value) + ")"
 
 
 class LinkedListIterator:
@@ -160,9 +156,9 @@ class LinkedList:
         content = str(self._head)
         node = self._head.next
         while node:
-            content += ' -> ' + str(node)
+            content += " -> " + str(node)
             node = node.next
-        return 'SLL [' + content + ']'
+        return "SLL [" + content + "]"
 
     def __iter__(self) -> LinkedListIterator:
         """Return an iterator for the list, starting at the head."""
@@ -208,8 +204,8 @@ class LinkedList:
 
 # ---------- For use in Open Addressing (OA) HashMap  ---------- #
 
-class HashEntry:
 
+class HashEntry:
     def __init__(self, key: str, value: object) -> None:
         """Initialize an entry for use in a hash map."""
         self.key = key
