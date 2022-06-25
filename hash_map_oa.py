@@ -1,22 +1,25 @@
-# Name: Andrew Scott
-# OSU Email: scottand@oregonstate.edu
-# Course: CS261 - Data Structures
-# Assignment: 6
-# Due Date: 2022-06-03
+# Author: Andrew Scott
 # Description: HashMap implementation using Open Addressing with Quadratic
-#              Probing
+#              Probing for collision resolution
 
 
-from a6_include import DynamicArray, HashEntry, hash_function_1, hash_function_2
+from hm_include import DynamicArray, HashEntry, hash_function_1, hash_function_2
 
 
 class HashMap:
+    """
+    Hash map that uses quadratic probing for collision resolution
+
+    Parameters
+    ----------
+    capacity : int
+        Initial capacity for the hash map
+    function : function
+        Hash function to use
+    """
+
     def __init__(self, capacity: int, function) -> None:
-        """
-        Initialize new HashMap that uses
-        quadratic probing for collision resolution
-        DO NOT CHANGE THIS METHOD IN ANY WAY
-        """
+        """Constructor for the HashMap class"""
         self._buckets = DynamicArray()
         for _ in range(capacity):
             self._buckets.append(None)
@@ -26,30 +29,40 @@ class HashMap:
         self._size = 0
 
     def __str__(self) -> str:
+        """Override string method to provide more readable output
+
+        Returns
+        -------
+        str
+            Hash map in human readable form
         """
-        Override string method to provide more readable output
-        DO NOT CHANGE THIS METHOD IN ANY WAY
-        """
+
         out = ""
         for i in range(self._buckets.length()):
             out += str(i) + ": " + str(self._buckets[i]) + "\n"
         return out
 
     def get_size(self) -> int:
+        """Get the map size
+
+        Returns
+        -------
+        int
+            Size of the hash map
         """
-        Return size of map
-        DO NOT CHANGE THIS METHOD IN ANY WAY
-        """
+
         return self._size
 
     def get_capacity(self) -> int:
-        """
-        Return capacity of map
-        DO NOT CHANGE THIS METHOD IN ANY WAY
-        """
-        return self._capacity
+        """Get the map capacity
 
-    # ------------------------------------------------------------------ #
+        Returns
+        -------
+        int
+            Capacity of the hash map
+        """
+
+        return self._capacity
 
     def put(self, key: str, value: object) -> None:
         """Adds (or updates) a key/value pair to the hash map
@@ -251,7 +264,7 @@ class HashMap:
 
 if __name__ == "__main__":
 
-    print("\nPDF - put example 1")
+    print("\n put example 1")
     print("-------------------")
     m = HashMap(50, hash_function_1)
     for i in range(150):
@@ -259,7 +272,7 @@ if __name__ == "__main__":
         if i % 25 == 24:
             print(m.empty_buckets(), m.table_load(), m.get_size(), m.get_capacity())
 
-    print("\nPDF - put example 2")
+    print("\n put example 2")
     print("-------------------")
     m = HashMap(40, hash_function_2)
     for i in range(50):
@@ -267,7 +280,7 @@ if __name__ == "__main__":
         if i % 10 == 9:
             print(m.empty_buckets(), m.table_load(), m.get_size(), m.get_capacity())
 
-    print("\nPDF - table_load example 1")
+    print("\n table_load example 1")
     print("--------------------------")
     m = HashMap(100, hash_function_1)
     print(m.table_load())
@@ -278,7 +291,7 @@ if __name__ == "__main__":
     m.put("key1", 30)
     print(m.table_load())
 
-    print("\nPDF - table_load example 2")
+    print("\n table_load example 2")
     print("--------------------------")
     m = HashMap(50, hash_function_1)
     for i in range(50):
@@ -286,7 +299,7 @@ if __name__ == "__main__":
         if i % 10 == 0:
             print(m.table_load(), m.get_size(), m.get_capacity())
 
-    print("\nPDF - empty_buckets example 1")
+    print("\n empty_buckets example 1")
     print("-----------------------------")
     m = HashMap(100, hash_function_1)
     print(m.empty_buckets(), m.get_size(), m.get_capacity())
@@ -299,7 +312,7 @@ if __name__ == "__main__":
     m.put("key4", 40)
     print(m.empty_buckets(), m.get_size(), m.get_capacity())
 
-    print("\nPDF - empty_buckets example 2")
+    print("\n empty_buckets example 2")
     print("-----------------------------")
     m = HashMap(50, hash_function_1)
     for i in range(150):
@@ -307,7 +320,7 @@ if __name__ == "__main__":
         if i % 30 == 0:
             print(m.empty_buckets(), m.get_size(), m.get_capacity())
 
-    print("\nPDF - resize example 1")
+    print("\n resize example 1")
     print("----------------------")
     m = HashMap(20, hash_function_1)
     m.put("key1", 10)
@@ -315,7 +328,7 @@ if __name__ == "__main__":
     m.resize_table(30)
     print(m.get_size(), m.get_capacity(), m.get("key1"), m.contains_key("key1"))
 
-    print("\nPDF - resize example 2")
+    print("\n resize example 2")
     print("----------------------")
     m = HashMap(75, hash_function_2)
     keys = [i for i in range(1, 1000, 13)]
@@ -345,14 +358,14 @@ if __name__ == "__main__":
             capacity, result, m.get_size(), m.get_capacity(), round(m.table_load(), 2)
         )
 
-    print("\nPDF - get example 1")
+    print("\n get example 1")
     print("-------------------")
     m = HashMap(30, hash_function_1)
     print(m.get("key"))
     m.put("key1", 10)
     print(m.get("key1"))
 
-    print("\nPDF - get example 2")
+    print("\n get example 2")
     print("-------------------")
     m = HashMap(150, hash_function_2)
     for i in range(200, 300, 7):
@@ -362,7 +375,7 @@ if __name__ == "__main__":
         print(i, m.get(str(i)), m.get(str(i)) == i * 10)
         print(i + 1, m.get(str(i + 1)), m.get(str(i + 1)) == (i + 1) * 10)
 
-    print("\nPDF - contains_key example 1")
+    print("\n contains_key example 1")
     print("----------------------------")
     m = HashMap(10, hash_function_1)
     print(m.contains_key("key1"))
@@ -376,7 +389,7 @@ if __name__ == "__main__":
     m.remove("key3")
     print(m.contains_key("key3"))
 
-    print("\nPDF - contains_key example 2")
+    print("\n contains_key example 2")
     print("----------------------------")
     m = HashMap(75, hash_function_2)
     keys = [i for i in range(1, 1000, 20)]
@@ -391,7 +404,7 @@ if __name__ == "__main__":
         result &= not m.contains_key(str(key + 1))
     print(result)
 
-    print("\nPDF - remove example 1")
+    print("\n remove example 1")
     print("----------------------")
     m = HashMap(50, hash_function_1)
     print(m.get("key1"))
@@ -401,7 +414,7 @@ if __name__ == "__main__":
     print(m.get("key1"))
     m.remove("key4")
 
-    print("\nPDF - clear example 1")
+    print("\n clear example 1")
     print("---------------------")
     m = HashMap(100, hash_function_1)
     print(m.get_size(), m.get_capacity())
@@ -412,7 +425,7 @@ if __name__ == "__main__":
     m.clear()
     print(m.get_size(), m.get_capacity())
 
-    print("\nPDF - clear example 2")
+    print("\n clear example 2")
     print("---------------------")
     m = HashMap(50, hash_function_1)
     print(m.get_size(), m.get_capacity())
@@ -425,7 +438,7 @@ if __name__ == "__main__":
     m.clear()
     print(m.get_size(), m.get_capacity())
 
-    print("\nPDF - get_keys example 1")
+    print("\n get_keys example 1")
     print("------------------------")
     m = HashMap(10, hash_function_2)
     for i in range(100, 200, 10):
